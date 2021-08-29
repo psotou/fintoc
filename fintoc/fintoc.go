@@ -23,11 +23,9 @@ const (
 type APIClient struct {
 	Secret string
 	Client *http.Client
-
-	// The old way, when I attempted to include interfaces
+	// We add the MovementM interface in this struct to allow
+	// for a syntax like client.Link.Method()
 	Link LinkM
-	// Account AccountM
-	// Movement MovementM
 }
 
 type Link struct {
@@ -103,7 +101,8 @@ type Institucion struct {
 // NewClient populates the APIClient
 func NewClient(secret string) (*APIClient, error) {
 	c := &APIClient{Secret: secret, Client: &http.Client{}}
-
+	// The following populates the LinkClient struct in order to have it
+	// ready for the LinkM interface to use its methods
 	c.Link = &LinkClient{APIClient: c}
 	return c, nil
 }
