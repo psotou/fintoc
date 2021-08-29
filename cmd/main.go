@@ -12,7 +12,7 @@ func main() {
 	client, _ := fintoc.NewClient(secret)
 
 	// links := client.LinkAll()
-	link := client.LinkOne("link_qxgKG9wil0MLQ1zy_token_r7otpJLSrY4xbCsXiyJVaCCFpas")
+	link := client.LinkOne("")
 	// for _, v := range links {
 	// 	fmt.Println(v)
 	// }
