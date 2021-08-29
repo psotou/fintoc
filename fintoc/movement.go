@@ -6,10 +6,10 @@ import (
 	"log"
 )
 
-func (n *newAccount) MovementAll() []Movement {
+func (n *NewAccount) MovementAll() []Movement {
 	var movements []Movement
 
-	url := fmt.Sprintf(Accounts+MovementsAll+LinkToken, n.account.Id, n.linkToken)
+	url := fmt.Sprintf(Accounts+MovementsAll+LinkToken, n.Id, n.linkToken)
 	dataBytes, _ := n.client.GetReq(url)
 	err := json.Unmarshal(dataBytes, &movements)
 	if err != nil {
@@ -18,9 +18,9 @@ func (n *newAccount) MovementAll() []Movement {
 	return movements
 }
 
-func (n *newAccount) MovementOne(movementId string) Movement {
+func (n *NewAccount) MovementOne(movementId string) Movement {
 	var movement Movement
-	url := fmt.Sprintf(Accounts+Movements+LinkToken, n.account.Id, movementId, n.linkToken)
+	url := fmt.Sprintf(Accounts+Movements+LinkToken, n.Id, movementId, n.linkToken)
 	dataBytes, _ := n.client.GetReq(url)
 	err := json.Unmarshal(dataBytes, &movement)
 	if err != nil {

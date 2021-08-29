@@ -6,11 +6,11 @@ import (
 	"log"
 )
 
-func (n *newLink) AccountAll() []Account {
-	return n.link.Accounts
+func (n *NewLink) AccountAll() []Account {
+	return n.Accounts
 }
 
-func (n *newLink) AccounOne(accountId string) *newAccount {
+func (n *NewLink) AccounOne(accountId string) *NewAccount {
 	var account Account
 	url := fmt.Sprintf(Accounts+LinkToken, accountId, n.linkToken)
 	byteData, _ := n.client.GetReq(url)
@@ -18,12 +18,14 @@ func (n *newLink) AccounOne(accountId string) *newAccount {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	newA := &newAccount{client: n.client, account: account, linkToken: n.linkToken}
+	newA := &NewAccount{client: n.client, Account: account, linkToken: n.linkToken}
 	return newA
 }
 
-type newAccount struct {
-	client    *APIClient
-	account   Account
+type NewAccount struct {
+	client *APIClient
+	// We make this field anonymous in order to directly get
+	// the attributes of the Account object
+	Account
 	linkToken string
 }

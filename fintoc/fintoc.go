@@ -102,23 +102,17 @@ type Institucion struct {
 
 // NewClient populates the APIClient
 func NewClient(secret string) (*APIClient, error) {
-	c := &APIClient{Secret: secret, Client: &http.Client{}}
-
-	// c.Link = &LinkClient{client: c}
-	// c.Account = &AccountClient{ApiClient: c}
-	// c.Movement = &MovementClient{ApiClient: c}
-
-	return c, nil
+	return &APIClient{Secret: secret, Client: &http.Client{}}, nil
 }
 
 // Formats resource url with the base url
-func FormatResourceUrl(resource string) string {
-	return fmt.Sprintf("%s%s", BaseURL, resource)
+func FormatUrl(resourceUrl string) string {
+	return fmt.Sprintf("%s%s", BaseURL, resourceUrl)
 }
 
-// Function for requests with custom errors
-func (client *APIClient) Req(resourceUrl string) (*http.Response, error) {
-	url := FormatResourceUrl(resourceUrl)
+// Function Reqwest for requests with custom errors
+func (client *APIClient) Reqwest(resourceUrl string) (*http.Response, error) {
+	url := FormatUrl(resourceUrl)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		log.Fatal(err.Error())
@@ -129,7 +123,6 @@ func (client *APIClient) Req(resourceUrl string) (*http.Response, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// defer res.Body.Close()
 
 	// we manage the custom errors in this block
 	if res.StatusCode != http.StatusOK {
@@ -144,9 +137,9 @@ func (client *APIClient) Req(resourceUrl string) (*http.Response, error) {
 	return res, nil
 }
 
-// takes the response with the custom error and handles it appropriately
+// GetReq takes the response with the custom error and handles it appropriately
 func (client *APIClient) GetReq(url string) ([]byte, error) {
-	res, err := client.Req(url)
+	res, err := client.Reqwest(url)
 	if err != nil {
 		log.Fatal(err)
 	}

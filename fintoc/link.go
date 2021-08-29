@@ -16,7 +16,7 @@ func (a *APIClient) LinkAll() []Link {
 	return links
 }
 
-func (a *APIClient) LinkOne(linkdId string) *newLink {
+func (a *APIClient) LinkOne(linkdId string) *NewLink {
 	var link Link
 	url := fmt.Sprintf(LinkURL, linkdId)
 	dataBytes, _ := a.GetReq(url)
@@ -24,12 +24,14 @@ func (a *APIClient) LinkOne(linkdId string) *newLink {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	newL := &newLink{client: a, link: link, linkToken: linkdId}
+	newL := &NewLink{client: a, Link: link, linkToken: linkdId}
 	return newL
 }
 
-type newLink struct {
-	client    *APIClient
-	link      Link
+type NewLink struct {
+	client *APIClient
+	// We make this field anonymous in order to directly get
+	// the attributes of the Link object
+	Link
 	linkToken string
 }
