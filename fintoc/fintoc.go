@@ -129,7 +129,7 @@ func (client *APIClient) Req(resourceUrl string) (*http.Response, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer res.Body.Close()
+	// defer res.Body.Close()
 
 	// we manage the custom errors in this block
 	if res.StatusCode != http.StatusOK {
