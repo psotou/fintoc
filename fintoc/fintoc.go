@@ -25,8 +25,8 @@ type APIClient struct {
 	Client *http.Client
 
 	// The old way, when I attempted to include interfaces
-	// Link     LinkM
-	// Account  AccountM
+	Link LinkM
+	// Account AccountM
 	// Movement MovementM
 }
 
@@ -102,7 +102,10 @@ type Institucion struct {
 
 // NewClient populates the APIClient
 func NewClient(secret string) (*APIClient, error) {
-	return &APIClient{Secret: secret, Client: &http.Client{}}, nil
+	c := &APIClient{Secret: secret, Client: &http.Client{}}
+
+	c.Link = &LinkClient{APIClient: c}
+	return c, nil
 }
 
 // Formats resource url with the base url
