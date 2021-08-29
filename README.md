@@ -11,12 +11,12 @@ import (
 )
 
 func main() {
-    client, err := fintoc.NewClient("<secret>")
+    client, err := fintoc.NewClient("secret")
     if err != nil {
         log.Fatal(err)
     }
 
-    link := client.Link.Get("<linkToken>")
+    link := client.Link.Get("linkToken")
     fmt.Prinln(link)
 }
 ```
