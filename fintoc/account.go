@@ -6,26 +6,41 @@ import (
 	"log"
 )
 
-func (n *NewLink) AccountAll() []Account {
-	return n.Accounts
-}
-
-func (n *NewLink) AccounOne(accountId string) *NewAccount {
-	var account Account
-	url := fmt.Sprintf(Accounts+LinkToken, accountId, n.linkToken)
-	byteData, _ := n.client.GetReq(url)
-	err := json.Unmarshal(byteData, &account)
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-	newA := &NewAccount{client: n.client, Account: account, linkToken: n.linkToken}
-	return newA
-}
-
 type NewAccount struct {
 	client *APIClient
 	// We make this field anonymous in order to directly get
 	// the attributes of the Account object
 	Account
 	linkToken string
+	// Since Get() method returns a *NewAccount, we need to add
+	// the MovementM interface in this struct to allow for a
+	// syntax like account.Movement.Method()
+	Movement MovementM
+}
+type AccountClient struct {
+	*NewLink
+}
+
+type AccountM interface {
+	All() []Account
+	Get(string) *NewAccount
+}
+
+func (a *AccountClient) All() []Account {
+	return a.Accounts
+}
+
+func (a *AccountClient) Get(accountId string) *NewAccount {
+	var account Account
+	url := fmt.Sprintf(Accounts+LinkToken, accountId, a.linkToken)
+	byteData, _ := a.client.GetReq(url)
+	err := json.Unmarshal(byteData, &account)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	newA := &NewAccount{client: a.client, Account: account, linkToken: a.linkToken}
+	// The following populates the MovementClient struct in order to have it
+	// ready for the MovementM interface to use its methods
+	newA.Movement = &MovementClient{NewAccount: newA}
+	return newA
 }
