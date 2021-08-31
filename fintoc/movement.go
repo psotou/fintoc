@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/url"
 )
 
 type MovementClient struct {
@@ -11,16 +12,44 @@ type MovementClient struct {
 }
 
 type MovementM interface {
-	All() []Movement
+	All(opts ...Params) []Movement
 	Get(string) Movement
 }
 
-func (n *NewAccount) All() []Movement {
-	var movements []Movement
+type Params struct {
+	Since   string
+	Until   string
+	PerPage string
+}
 
-	url := fmt.Sprintf(Accounts+MovementsAll+LinkToken, n.Id, n.linkToken)
-	dataBytes, _ := n.client.GetReq(url)
-	err := json.Unmarshal(dataBytes, &movements)
+func (n *NewAccount) All(opts ...Params) []Movement {
+	uri := fmt.Sprintf(Accounts+MovementsAll, n.Id)
+	u, err := url.Parse(uri)
+	if err != nil {
+		log.Fatal(err)
+	}
+	q := u.Query()
+	q.Add("link_token", n.linkToken)
+
+	// Since opts is a slice of elements of type Params and
+	// we know that we're ONLY accepting one element
+	// we proceed and extract by hand the element to be used
+	if len(opts) > 0 {
+		if opts[0].Since != "" {
+			q.Add("since", opts[0].Since)
+		}
+		if opts[0].Until != "" {
+			q.Add("until", opts[0].Until)
+		}
+		if opts[0].PerPage != "" {
+			q.Add("per_page", opts[0].PerPage)
+		}
+	}
+
+	u.RawQuery = q.Encode()
+	var movements []Movement
+	dataBytes, _ := n.client.GetReq(u.String())
+	err = json.Unmarshal(dataBytes, &movements)
 	if err != nil {
 		log.Fatal(err.Error())
 	}

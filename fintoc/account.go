@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/url"
 )
 
 type NewAccount struct {
@@ -31,10 +32,18 @@ func (a *AccountClient) All() []Account {
 }
 
 func (a *AccountClient) Get(accountId string) *NewAccount {
+	uri := fmt.Sprintf(Accounts, accountId)
+	u, err := url.Parse(uri)
+	if err != nil {
+		log.Fatal(err)
+	}
+	q := u.Query()
+	q.Add("link_token", a.linkToken)
+	u.RawQuery = q.Encode()
+
 	var account Account
-	url := fmt.Sprintf(Accounts+LinkToken, accountId, a.linkToken)
-	byteData, _ := a.client.GetReq(url)
-	err := json.Unmarshal(byteData, &account)
+	byteData, _ := a.client.GetReq(u.String())
+	err = json.Unmarshal(byteData, &account)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
