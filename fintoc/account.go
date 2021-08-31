@@ -42,7 +42,8 @@ func (a *AccountClient) Get(accountId string) *NewAccount {
 	u.RawQuery = q.Encode()
 
 	var account Account
-	byteData, _ := a.client.GetReq(u.String())
+	// byteData, _ := a.client.GetReq(u.String())
+	byteData, _ := a.client.getReq(u.String())
 	err = json.Unmarshal(byteData, &account)
 	if err != nil {
 		log.Fatal(err.Error())
