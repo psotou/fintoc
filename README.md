@@ -23,7 +23,7 @@ func main() {
 
 # Disclaimer
 
-This ~yet another carbon copy~ library is heavily influenced by the Python SDK devoleped by the guys at [Fintoc](https://fintoc.com/).
+This ~yet another carbon copy~ library is heavily influenced by the [Python SDK](https://github.com/fintoc-com/fintoc-python) devoleped by the guys at [Fintoc](https://fintoc.com/).
 
 The Go library is in a very early stage in which you can only used certain endpoints, namely, the **link**, **account** and **movements** endpoints.
 
@@ -74,7 +74,7 @@ for _, mov := range movements {
 }
 ```
 
-Howeverm, the `All` method of this interface allows for the use query params like this:
+However, the `All` method of this interface allows for the use query params like this:
 
 ```go
 params := fintoc.Params{Since: "2021-08-01", Until: "2021-08-31", PerPage: "100"}
