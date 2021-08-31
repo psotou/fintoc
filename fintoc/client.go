@@ -108,13 +108,13 @@ func NewClient(secret string) (*APIClient, error) {
 }
 
 // Formats resource url with the base url
-func FormatUrl(resourceUrl string) string {
+func formatUrl(resourceUrl string) string {
 	return fmt.Sprintf("%s%s", BaseURL, resourceUrl)
 }
 
 // Function requestMethod for requests with custom errors
 func (client *APIClient) requestMethod(reqMethod, resourceUrl string, reader io.Reader) (*http.Response, error) {
-	url := FormatUrl(resourceUrl)
+	url := formatUrl(resourceUrl)
 	req, err := http.NewRequest(reqMethod, url, reader)
 	if err != nil {
 		log.Fatal(err.Error())
@@ -162,6 +162,17 @@ func (client *APIClient) getReq(url string) ([]byte, error) {
 // updateReq updates the link according a payload
 func (client *APIClient) updateReq(url string, payload io.Reader) (int, error) {
 	res, err := client.requestMethod(http.MethodPatch, url, payload)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer res.Body.Close()
+
+	return res.StatusCode, nil
+}
+
+// deleteReq updates the link according a payload
+func (client *APIClient) deleteReq(url string) (int, error) {
+	res, err := client.requestMethod(http.MethodDelete, url, nil)
 	if err != nil {
 		log.Fatal(err)
 	}

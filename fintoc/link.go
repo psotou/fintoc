@@ -23,6 +23,7 @@ type NewLink struct {
 type LinkM interface {
 	All() []Link
 	Get(string) *NewLink
+	Delete(linkId string)
 }
 
 type LinkClient struct {
@@ -68,6 +69,15 @@ func (n *NewLink) Update(active bool) {
 	}
 	payload := strings.NewReader(strPayload)
 	httpResponse, _ := n.client.updateReq(url, payload)
+
+	fmt.Printf("Status Code: %v\n", httpResponse)
+}
+
+// The Delete method that will act upon the *LinkClient object
+// and will delete certain link provided its link_id
+func (l *LinkClient) Delete(linkId string) {
+	url := fmt.Sprintf(LinkURL, linkId)
+	httpResponse, _ := l.deleteReq(url)
 
 	fmt.Printf("Status Code: %v\n", httpResponse)
 }
