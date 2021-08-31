@@ -85,7 +85,7 @@ for _, mov := range movements {
 }
 ```
 
-However, the `All` method of this interface allows for the use query params like the following:
+The `All` method of this interface allows for the use query params like the following:
 
 ```go
 params := fintoc.Params{Since: "2021-08-01", Until: "2021-08-31", PerPage: "100"}
