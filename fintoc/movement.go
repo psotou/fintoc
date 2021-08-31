@@ -48,7 +48,8 @@ func (n *NewAccount) All(opts ...Params) []Movement {
 
 	u.RawQuery = q.Encode()
 	var movements []Movement
-	dataBytes, _ := n.client.GetReq(u.String())
+	// dataBytes, _ := n.client.GetReq(u.String())
+	dataBytes, _ := n.client.getReq(u.String())
 	err = json.Unmarshal(dataBytes, &movements)
 	if err != nil {
 		log.Fatal(err.Error())
@@ -59,7 +60,8 @@ func (n *NewAccount) All(opts ...Params) []Movement {
 func (n *NewAccount) Get(movementId string) Movement {
 	var movement Movement
 	url := fmt.Sprintf(Accounts+Movements+LinkToken, n.Id, movementId, n.linkToken)
-	dataBytes, _ := n.client.GetReq(url)
+	// dataBytes, _ := n.client.GetReq(url)
+	dataBytes, _ := n.client.getReq(url)
 	err := json.Unmarshal(dataBytes, &movement)
 	if err != nil {
 		log.Fatal(err.Error())

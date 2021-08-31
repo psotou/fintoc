@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"strings"
 )
 
 type NewLink struct {
@@ -30,7 +31,7 @@ type LinkClient struct {
 
 func (l *LinkClient) All() []Link {
 	var links []Link
-	dataBytes, _ := l.GetReq(LinksAll)
+	dataBytes, _ := l.getReq(LinksAll)
 	err := json.Unmarshal(dataBytes, &links)
 	if err != nil {
 		log.Fatal(err.Error())
@@ -38,18 +39,35 @@ func (l *LinkClient) All() []Link {
 	return links
 }
 
-func (l *LinkClient) Get(linkdId string) *NewLink {
+func (l *LinkClient) Get(linkToken string) *NewLink {
 	var link Link
-	url := fmt.Sprintf(LinkURL, linkdId)
-	dataBytes, _ := l.GetReq(url)
+	url := fmt.Sprintf(LinkURL, linkToken)
+	dataBytes, _ := l.getReq(url)
 	err := json.Unmarshal(dataBytes, &link)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	newL := &NewLink{client: l.APIClient, Link: link, linkToken: linkdId}
+	newL := &NewLink{client: l.APIClient, Link: link, linkToken: linkToken}
 	// The following populates the AccountClient struct in order to have it
 	// ready for the AccountM interface to use its methods
 	newL.Account = &AccountClient{NewLink: newL}
 
 	return newL
+}
+
+// The Update method that will act upon the *NewLink object
+// and will allow to activate o deactivate certain link
+func (n *NewLink) Update(active bool) {
+	var strPayload string
+	url := fmt.Sprintf(LinkURL, n.linkToken)
+
+	if active {
+		strPayload = "{\"active\":true}"
+	} else {
+		strPayload = "{\"active\":false}"
+	}
+	payload := strings.NewReader(strPayload)
+	httpResponse, _ := n.client.updateReq(url, payload)
+
+	fmt.Printf("Status Code: %v\n", httpResponse)
 }

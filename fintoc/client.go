@@ -112,12 +112,16 @@ func FormatUrl(resourceUrl string) string {
 	return fmt.Sprintf("%s%s", BaseURL, resourceUrl)
 }
 
-// Function Reqwest for requests with custom errors
-func (client *APIClient) Reqwest(resourceUrl string) (*http.Response, error) {
+// Function requestMethod for requests with custom errors
+func (client *APIClient) requestMethod(reqMethod, resourceUrl string, reader io.Reader) (*http.Response, error) {
 	url := FormatUrl(resourceUrl)
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest(reqMethod, url, reader)
 	if err != nil {
 		log.Fatal(err.Error())
+	}
+
+	if reqMethod == http.MethodPatch {
+		req.Header.Add("Content-Type", "application/json")
 	}
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Authorization", client.Secret)
@@ -139,9 +143,9 @@ func (client *APIClient) Reqwest(resourceUrl string) (*http.Response, error) {
 	return res, nil
 }
 
-// GetReq takes the response with the custom error and handles it appropriately
-func (client *APIClient) GetReq(url string) ([]byte, error) {
-	res, err := client.Reqwest(url)
+// getReq takes the response with the custom error and handles it appropriately
+func (client *APIClient) getReq(url string) ([]byte, error) {
+	res, err := client.requestMethod(http.MethodGet, url, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -153,4 +157,15 @@ func (client *APIClient) GetReq(url string) ([]byte, error) {
 	}
 
 	return body, nil
+}
+
+// updateReq updates the link according a payload
+func (client *APIClient) updateReq(url string, payload io.Reader) (int, error) {
+	res, err := client.requestMethod(http.MethodPatch, url, payload)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer res.Body.Close()
+
+	return res.StatusCode, nil
 }
