@@ -23,9 +23,9 @@ func main() {
 
 # Disclaimer
 
-This ~yet another carbon copy~ library is heavily influenced by the [Python SDK](https://github.com/fintoc-com/fintoc-python) devoleped by the guys at [Fintoc](https://fintoc.com/).
+This ~yet another carbon copy~  Go library is heavily influenced by the [Python SDK](https://github.com/fintoc-com/fintoc-python) devoleped by the guys at [Fintoc](https://fintoc.com/).
 
-This Go library is in a very early stage in which you can only used certain endpoints, namely, the **link**, **account** and **movements** endpoints. Though, the whole API, with all its endpoints, should be wrapped up soon.
+The library is in a very early stage, which means you can only use certain endpoints, namely, the **link**, **account** and **movements** endpoints. Though, the whole API, with all its endpoints, should be wrapped up soon.
 
 # HOW-TO
 
@@ -100,5 +100,6 @@ for _, mov := range movements {
 + [x] Add query params to movements call
 + [x] Add methods PATCH and DELETE for link object
 + [ ] Add tests
++ [ ] Add a workflow
 
 So far, only a limited amount of FINTOC API resources are going to be covered. More resources should be added in the future.
