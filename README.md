@@ -25,9 +25,7 @@ func main() {
 
 This ~yet another carbon copy~ library is heavily influenced by the [Python SDK](https://github.com/fintoc-com/fintoc-python) devoleped by the guys at [Fintoc](https://fintoc.com/).
 
-The Go library is in a very early stage in which you can only used certain endpoints, namely, the **link**, **account** and **movements** endpoints.
-
-The whole API, with all its endpoints, should be wrapped up soon, though.
+This Go library is in a very early stage in which you can only used certain endpoints, namely, the **link**, **account** and **movements** endpoints. Though, the whole API, with all its endpoints, should be wrapped up soon.
 
 # HOW-TO
 
@@ -35,7 +33,7 @@ The whole API, with all its endpoints, should be wrapped up soon, though.
 
 The `Link` interface comes with the methods `All` and `Get` (very soon it'll come with the `Update`and `Delete` methods as well).
 
-The available methods can be used as follows:
+The available methods can be used as follow:
 
 ```go
 client, err := fintoc.NewClient("secret")
@@ -74,7 +72,7 @@ for _, mov := range movements {
 }
 ```
 
-However, the `All` method of this interface allows for the use query params like this:
+However, the `All` method of this interface allows for the use query params like the following:
 
 ```go
 params := fintoc.Params{Since: "2021-08-01", Until: "2021-08-31", PerPage: "100"}
