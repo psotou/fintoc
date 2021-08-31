@@ -31,9 +31,7 @@ This Go library is in a very early stage in which you can only used certain endp
 
 ## The `Link` interface
 
-The `Link` interface comes with the methods `All` and `Get` (very soon it'll come with the `Update`and `Delete` methods as well).
-
-The available methods can be used as follow:
+The `Link` interface comes with the methods `All`, `Get`, `Update`and `Delete`.
 
 ```go
 client, err := fintoc.NewClient("secret")
@@ -47,6 +45,21 @@ for _, l := range links {
     fmt.Println(l.Id)
 }
 ```
+
+To update a link (that is, changing its active status to either true or false), we do as follows:
+
+```go
+link := client.Link.Get("linkToken") // to return one link object
+link.Update(false)                   // this will print the http status code of the request
+```
+
+To delete a link, we should first look for the `linkId` by running the `client.Link.All()` method. Once we get the id, we do:
+
+```go
+client.Link.Delete("linkId")        // will also print the http status code of the request
+```
+
+Bear in mind that both the `Update`and `Delete` are methods that do not return a value, but rather perform an action.
 
 ## The `Account` interface
 
@@ -85,7 +98,7 @@ for _, mov := range movements {
 # TO-DO
                                                                                             
 + [x] Add query params to movements call
-+ [ ] Add methods PATCH and DELETE for link object.
-+ [ ] Add tests.
++ [x] Add methods PATCH and DELETE for link object
++ [ ] Add tests
 
 So far, only a limited amount of FINTOC API resources are going to be covered. More resources should be added in the future.
