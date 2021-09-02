@@ -55,7 +55,7 @@ updatedLink := link.Update(false)
 To delete a link, we should first look for the `linkId` of the link we'd like to delete by running the `client.Link.All()` method. With the id in hand, we do:
 
 ```go
-client.Link.Delete("linkId")        // will also print the http status code of the request
+client.Link.Delete("linkId")        // will print the http status code of the request
 ```
 
 ## The `Account` interface
@@ -93,8 +93,9 @@ for _, mov := range movements {
 ```
 
 # TO-DO
-                                                                                            
-+ [x] Add query params to movements call
-+ [x] Add methods PATCH and DELETE for link object
+
++ [ ] Add the rest of the resoruces
 + [ ] Add tests
 + [ ] Add a workflow
++ [x] Add query params to movements endpoint
++ [x] Add methods PATCH and DELETE for the link object

@@ -10,13 +10,13 @@ import (
 
 const (
 	BaseURL      = "https://api.fintoc.com/v1/"
-	Accounts     = "accounts/%s"    // %s: {account_id}
-	AccountsAll  = "accounts/"      //
-	Movements    = "/movements/%s"  // %s: {movement_id}
-	MovementsAll = "/movements/"    //
-	LinkToken    = "?link_token=%s" //
-	LinkURL      = "links/%s"       // %s: {link_token}
-	LinksAll     = "links/"         //
+	Accounts     = "accounts/%s"   // %s: {account_id}
+	AccountsAll  = "accounts/"     //
+	Movements    = "/movements/%s" // %s: {movement_id}
+	MovementsAll = "/movements/"   //
+	// LinkToken    = "?link_token=%s" //
+	LinkURL  = "links/%s" // %s: {link_token}
+	LinksAll = "links/"   //
 )
 
 // Fintoc API client

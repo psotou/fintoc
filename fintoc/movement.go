@@ -55,8 +55,12 @@ func (n *NewAccount) All(opts ...Params) []Movement {
 
 func (n *NewAccount) Get(movementId string) Movement {
 	var movement Movement
-	url := fmt.Sprintf(Accounts+Movements+LinkToken, n.Id, movementId, n.linkToken)
-	dataBytes, _ := n.client.getReq(url)
+	uri := fmt.Sprintf(Accounts+Movements, n.Id, movementId)
+	u, _ := url.Parse(uri)
+	q := u.Query()
+	q.Add("link_token", n.linkToken)
+	u.RawQuery = q.Encode()
+	dataBytes, _ := n.client.getReq(u.String())
 	err := json.Unmarshal(dataBytes, &movement)
 	if err != nil {
 		log.Fatal(err.Error())
