@@ -28,23 +28,30 @@ type AccountM interface {
 }
 
 func (a *AccountClient) All() []Account {
-	return a.Accounts
+	u, _ := url.Parse(AccountsAll)
+	q := u.Query()
+	q.Add("link_token", a.linkToken)
+	u.RawQuery = q.Encode()
+
+	var accounts []Account
+	dataBytes, _ := a.client.getReq(u.String())
+	err := json.Unmarshal(dataBytes, &accounts)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	return accounts
 }
 
 func (a *AccountClient) Get(accountId string) *NewAccount {
 	uri := fmt.Sprintf(Accounts, accountId)
-	u, err := url.Parse(uri)
-	if err != nil {
-		log.Fatal(err)
-	}
+	u, _ := url.Parse(uri)
 	q := u.Query()
 	q.Add("link_token", a.linkToken)
 	u.RawQuery = q.Encode()
 
 	var account Account
-	// byteData, _ := a.client.GetReq(u.String())
 	byteData, _ := a.client.getReq(u.String())
-	err = json.Unmarshal(byteData, &account)
+	err := json.Unmarshal(byteData, &account)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
