@@ -24,10 +24,7 @@ type Params struct {
 
 func (n *NewAccount) All(opts ...Params) []Movement {
 	uri := fmt.Sprintf(Accounts+MovementsAll, n.Id)
-	u, err := url.Parse(uri)
-	if err != nil {
-		log.Fatal(err)
-	}
+	u, _ := url.Parse(uri)
 	q := u.Query()
 	q.Add("link_token", n.linkToken)
 
@@ -48,9 +45,8 @@ func (n *NewAccount) All(opts ...Params) []Movement {
 
 	u.RawQuery = q.Encode()
 	var movements []Movement
-	// dataBytes, _ := n.client.GetReq(u.String())
 	dataBytes, _ := n.client.getReq(u.String())
-	err = json.Unmarshal(dataBytes, &movements)
+	err := json.Unmarshal(dataBytes, &movements)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -60,7 +56,6 @@ func (n *NewAccount) All(opts ...Params) []Movement {
 func (n *NewAccount) Get(movementId string) Movement {
 	var movement Movement
 	url := fmt.Sprintf(Accounts+Movements+LinkToken, n.Id, movementId, n.linkToken)
-	// dataBytes, _ := n.client.GetReq(url)
 	dataBytes, _ := n.client.getReq(url)
 	err := json.Unmarshal(dataBytes, &movement)
 	if err != nil {

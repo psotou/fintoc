@@ -10,10 +10,10 @@ import (
 
 const (
 	BaseURL      = "https://api.fintoc.com/v1/"
-	Accounts     = "accounts/%s"    // ?link_token=%s" // %s: {account_id}
-	AccountsAll  = "accounts/"      // ?link_token=%s"   //
+	Accounts     = "accounts/%s"    // %s: {account_id}
+	AccountsAll  = "accounts/"      //
 	Movements    = "/movements/%s"  // %s: {movement_id}
-	MovementsAll = "/movements/"    // ?link_token=%s" // %s: {link_token}
+	MovementsAll = "/movements/"    //
 	LinkToken    = "?link_token=%s" //
 	LinkURL      = "links/%s"       // %s: {link_token}
 	LinksAll     = "links/"         //
@@ -160,17 +160,22 @@ func (client *APIClient) getReq(url string) ([]byte, error) {
 }
 
 // updateReq updates the link according a payload
-func (client *APIClient) updateReq(url string, payload io.Reader) (int, error) {
+func (client *APIClient) updateReq(url string, payload io.Reader) ([]byte, error) {
 	res, err := client.requestMethod(http.MethodPatch, url, payload)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer res.Body.Close()
 
-	return res.StatusCode, nil
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return body, nil
 }
 
-// deleteReq updates the link according a payload
+// deleteReq deletes a link
 func (client *APIClient) deleteReq(url string) (int, error) {
 	res, err := client.requestMethod(http.MethodDelete, url, nil)
 	if err != nil {

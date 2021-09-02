@@ -58,7 +58,8 @@ func (l *LinkClient) Get(linkToken string) *NewLink {
 
 // The Update method that will act upon the *NewLink object
 // and will allow to activate o deactivate certain link
-func (n *NewLink) Update(active bool) {
+func (n *NewLink) Update(active bool) *NewLink {
+	var link Link
 	var strPayload string
 	url := fmt.Sprintf(LinkURL, n.linkToken)
 
@@ -68,9 +69,18 @@ func (n *NewLink) Update(active bool) {
 		strPayload = "{\"active\":false}"
 	}
 	payload := strings.NewReader(strPayload)
-	httpResponse, _ := n.client.updateReq(url, payload)
+	dataBytes, _ := n.client.updateReq(url, payload)
+	err := json.Unmarshal(dataBytes, &link)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 
-	fmt.Printf("Status Code: %v\n", httpResponse)
+	newL := &NewLink{client: n.client, Link: link, linkToken: n.linkToken}
+	// The following populates the AccountClient struct in order to have it
+	// ready for the AccountM interface to use its methods
+	newL.Account = &AccountClient{NewLink: newL}
+
+	return newL
 }
 
 // The Delete method that will act upon the *LinkClient object

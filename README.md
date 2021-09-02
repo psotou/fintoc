@@ -50,18 +50,13 @@ To update a link (that is, changing its active status to either true or false), 
 
 ```go
 link := client.Link.Get("linkToken") // to return one link object
-link.Update(false)                   // this will print the http status code of the request
-```
+updatedLink := link.Update(false)                   
 
 To delete a link, we should first look for the `linkId` of the link we'd like to delete by running the `client.Link.All()` method. With the id in hand, we do:
 
 ```go
 client.Link.Delete("linkId")        // will also print the http status code of the request
 ```
-
-Bear in mind that both the `Update`and `Delete` are methods that do not return a value, but rather perform an action.
-
-**Note to self:** should the `Update` and `Delete` methods panic in the event of a bad request? 
 
 ## The `Account` interface
 
@@ -103,5 +98,3 @@ for _, mov := range movements {
 + [x] Add methods PATCH and DELETE for link object
 + [ ] Add tests
 + [ ] Add a workflow
-
-So far, only a limited amount of FINTOC API resources are going to be covered. More resources should be added in the future.
