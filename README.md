@@ -97,7 +97,7 @@ for _, mov := range movements {
 
 # TO-DO
 
-+ [ ] Add the rest of the resoruces
++ [ ] Add the rest of the resources
 + [ ] Add tests
 + [ ] Add a workflow
 + [x] Add query params to movements endpoint
