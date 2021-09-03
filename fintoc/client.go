@@ -117,7 +117,7 @@ func (client *APIClient) requestMethod(reqMethod, resourceUrl string, reader io.
 	url := formatUrl(resourceUrl)
 	req, err := http.NewRequest(reqMethod, url, reader)
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Fatal(err)
 	}
 
 	if reqMethod == http.MethodPatch {
@@ -131,7 +131,7 @@ func (client *APIClient) requestMethod(reqMethod, resourceUrl string, reader io.
 	}
 
 	// we manage the custom errors in this block
-	if res.StatusCode != http.StatusOK {
+	if res.StatusCode != http.StatusOK && res.StatusCode != http.StatusNoContent {
 		var apiErr Error
 		err := json.NewDecoder(res.Body).Decode(&apiErr)
 		if err != nil {

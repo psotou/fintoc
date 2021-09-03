@@ -52,13 +52,20 @@ To update a link (that is, changing its active status to either true or false), 
 
 ```go
 link := client.Link.Get("linkToken") // to return one link object
-updatedLink := link.Update(false)
+link.Update(false)
 ```       
 
-To delete a link, we should first look for the `linkId` of the link we'd like to delete by running the `client.Link.All()` method. With the id in hand, we do:
+To delete a link, you can either run
 
 ```go
 client.Link.Delete("linkId")        // will print the http status code of the request
+```
+
+or,
+
+```go
+link := client.Link.Get("linkToken")
+link.Delete()
 ```
 
 ## The `Account` interface
