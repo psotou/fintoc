@@ -89,5 +89,12 @@ func (l *LinkClient) Delete(linkId string) {
 	url := fmt.Sprintf(LinkURL, linkId)
 	httpResponse, _ := l.deleteReq(url)
 
-	fmt.Printf("Status Code: %v\n", httpResponse)
+	fmt.Printf("Status Code: %d\n", httpResponse)
+}
+
+func (n *NewLink) Delete() {
+	url := fmt.Sprintf(LinkURL, n.Link.Id)
+	httpResponse, _ := n.client.deleteReq(url)
+
+	fmt.Printf("Status Code: %d\n", httpResponse)
 }
