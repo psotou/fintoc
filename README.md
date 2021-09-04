@@ -98,7 +98,7 @@ for _, mov := range movements {
 }
 ```
 
-The `All` method of this interface allows for the use query params. The endpoint for this resource supports three query params: `since`, `until` and `per_page` (more on the use of them [here](https://docs.fintoc.com/reference/listar-movimientos)). 
+The `All` method of this interface allows for the use of query params. The endpoint for this resource supports three query params: `since`, `until` and `per_page` (more on the use of these [here](https://docs.fintoc.com/reference/listar-movimientos)). 
 
 ```go
 params := fintoc.Params{Since: "2021-08-01", Until: "2021-08-31", PerPage: "100"}
