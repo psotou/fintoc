@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 )
 
@@ -14,9 +13,8 @@ const (
 	AccountsAll  = "accounts/"     //
 	Movements    = "/movements/%s" // %s: {movement_id}
 	MovementsAll = "/movements/"   //
-	// LinkToken    = "?link_token=%s" //
-	LinkURL  = "links/%s" // %s: {link_token}
-	LinksAll = "links/"   //
+	LinkURL      = "links/%s"      // %s: {link_token}
+	LinksAll     = "links/"        //
 )
 
 // Fintoc API client
@@ -100,7 +98,10 @@ type Institucion struct {
 
 // NewClient populates the APIClient
 func NewClient(secret string) (*APIClient, error) {
-	c := &APIClient{Secret: secret, Client: &http.Client{}}
+	c := &APIClient{
+		Secret: secret,
+		Client: &http.Client{},
+	}
 	// The following populates the LinkClient struct in order to have it
 	// ready for the LinkM interface to use its methods
 	c.Link = &LinkClient{APIClient: c}
@@ -117,17 +118,18 @@ func (client *APIClient) requestMethod(reqMethod, resourceUrl string, reader io.
 	url := formatUrl(resourceUrl)
 	req, err := http.NewRequest(reqMethod, url, reader)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
-
+	req.Header = http.Header{
+		"Accept":        []string{"application/json"},
+		"Authorization": []string{client.Secret},
+	}
 	if reqMethod == http.MethodPatch {
 		req.Header.Add("Content-Type", "application/json")
 	}
-	req.Header.Add("Accept", "application/json")
-	req.Header.Add("Authorization", client.Secret)
 	res, err := client.Client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	// we manage the custom errors in this block
@@ -147,15 +149,14 @@ func (client *APIClient) requestMethod(reqMethod, resourceUrl string, reader io.
 func (client *APIClient) getReq(url string) ([]byte, error) {
 	res, err := client.requestMethod(http.MethodGet, url, nil)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	defer res.Body.Close()
 
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
-
 	return body, nil
 }
 
@@ -163,13 +164,13 @@ func (client *APIClient) getReq(url string) ([]byte, error) {
 func (client *APIClient) updateReq(url string, payload io.Reader) ([]byte, error) {
 	res, err := client.requestMethod(http.MethodPatch, url, payload)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	defer res.Body.Close()
 
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	return body, nil
@@ -179,7 +180,7 @@ func (client *APIClient) updateReq(url string, payload io.Reader) ([]byte, error
 func (client *APIClient) deleteReq(url string) (int, error) {
 	res, err := client.requestMethod(http.MethodDelete, url, nil)
 	if err != nil {
-		log.Fatal(err)
+		return 0, err
 	}
 	defer res.Body.Close()
 
