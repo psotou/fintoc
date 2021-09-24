@@ -17,15 +17,6 @@ const (
 	LinksAll     = "links/"        //
 )
 
-// Fintoc API client
-type APIClient struct {
-	Secret string
-	Client *http.Client
-	// We add the MovementM interface in this struct to allow
-	// for a syntax like client.Link.Method()
-	Link LinkM
-}
-
 type Link struct {
 	Id          string      `json:"id"`
 	Object      string      `json:"object"`
@@ -96,6 +87,38 @@ type Institucion struct {
 	Country string `json:"country"`
 }
 
+// Fintoc API client
+type APIClient struct {
+	Secret string
+	Client *http.Client
+	// We add the MovementM interface in this struct to allow
+	// for a syntax like client.Link.Method()
+	Link LinkM
+}
+
+// HTTP client interface to allow us to set instances of
+// either http.Client or our mock http client
+type HTTPClient interface {
+	Do(req *http.Request) (*http.Response, error)
+}
+
+var Client HTTPClient
+
+func init() {
+	Client = &http.Client{}
+}
+
+// MockClient sets the function that our mock Do method will run instead
+// instead of the http.Client.Do method
+type MockClient struct {
+	DoFunc func(req *http.Request) (*http.Response, error)
+}
+
+// Do method that overrides the http.Client.Do method
+func (m *MockClient) Do(req *http.Request) (*http.Response, error) {
+	return m.DoFunc(req)
+}
+
 // NewClient populates the APIClient
 func NewClient(secret string) (*APIClient, error) {
 	c := &APIClient{
@@ -127,7 +150,8 @@ func (client *APIClient) requestMethod(reqMethod, resourceUrl string, reader io.
 	if reqMethod == http.MethodPatch {
 		req.Header.Add("Content-Type", "application/json")
 	}
-	res, err := client.Client.Do(req)
+	// res, err := client.Client.Do(req)
+	res, err := Client.Do(req)
 	if err != nil {
 		return nil, err
 	}
