@@ -49,7 +49,11 @@ func (l *LinkClient) Get(linkToken string) *NewLink {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	newL := &NewLink{client: l.APIClient, Link: link, linkToken: linkToken}
+	newL := &NewLink{
+		client:    l.APIClient,
+		Link:      link,
+		linkToken: linkToken,
+	}
 	// The following populates the AccountClient struct in order to have it
 	// ready for the AccountM interface to use its methods
 	newL.Account = &AccountClient{NewLink: newL}
@@ -77,7 +81,11 @@ func (n *NewLink) Update(active bool) *NewLink {
 		log.Fatal(err.Error())
 	}
 
-	newL := &NewLink{client: n.client, Link: link, linkToken: n.linkToken}
+	newL := &NewLink{
+		client:    n.client,
+		Link:      link,
+		linkToken: n.linkToken,
+	}
 	// The following populates the AccountClient struct in order to have it
 	// ready for the AccountM interface to use its methods
 	newL.Account = &AccountClient{NewLink: newL}
@@ -106,7 +114,11 @@ func (l *LinkClient) Update(linkToken string, active bool) *NewLink {
 		log.Fatal(err.Error())
 	}
 
-	newL = &NewLink{client: l.APIClient, Link: link, linkToken: linkToken}
+	newL = &NewLink{
+		client:    l.APIClient,
+		Link:      link,
+		linkToken: linkToken,
+	}
 	// The following populates the AccountClient struct in order to have it
 	// ready for the AccountM interface to use its methods
 	newL.Account = &AccountClient{NewLink: newL}
