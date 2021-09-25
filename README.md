@@ -111,7 +111,7 @@ for _, mov := range movements {
 # TO-DO
 
 + [ ] Add the rest of the resources
-+ [ ] Add tests
 + [ ] Add a workflow
++ [x] Add unit tests
 + [x] Add query params to movements endpoint
 + [x] Add methods PATCH and DELETE for the link object
