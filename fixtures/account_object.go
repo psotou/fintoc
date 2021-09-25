@@ -1,4 +1,6 @@
-{
+package fixtures
+
+var AccountObject = `{
   "id": "acc_nMNejK7BT8oGbvO4",
   "object": "account",
   "name": "Cuenta Corriente",
@@ -14,4 +16,4 @@
       "limit": 500000
   },
   "refreshed_at": "2020-11-18T18:43:54.591Z"
-}
+}`

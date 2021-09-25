@@ -11,8 +11,8 @@ import (
 )
 
 func TestLinkAll(t *testing.T) {
-	jsonResponse := fmt.Sprintf("[%v]", fixtures.LinkObject)
-	r := io.NopCloser(bytes.NewReader([]byte(jsonResponse)))
+	jsonLinks := fmt.Sprintf("[%v]", fixtures.LinkObject)
+	r := io.NopCloser(bytes.NewReader([]byte(jsonLinks)))
 	Client = &MockClient{
 		DoFunc: func(*http.Request) (*http.Response, error) {
 			return &http.Response{
@@ -26,21 +26,21 @@ func TestLinkAll(t *testing.T) {
 	if err != nil {
 		t.Error("Testing failed!")
 	}
-	result := client.Link.All()
+	links := client.Link.All()
 
-	if len(result) == 0 {
+	if len(links) == 0 {
 		t.Error("Failed. Empty object.")
 		return
 	}
-	if result[0].Accounts == nil {
+	if links[0].Accounts == nil {
 		t.Error("Link without account object.")
 		return
 	}
 }
 
 func TestLinkGet(t *testing.T) {
-	jsonResponse := fixtures.LinkObject
-	r := io.NopCloser(bytes.NewReader([]byte(jsonResponse)))
+	jsonLink := fixtures.LinkObject
+	r := io.NopCloser(bytes.NewReader([]byte(jsonLink)))
 	Client = &MockClient{
 		DoFunc: func(*http.Request) (*http.Response, error) {
 			return &http.Response{
@@ -54,9 +54,14 @@ func TestLinkGet(t *testing.T) {
 	if err != nil {
 		t.Error("Testing failed!")
 	}
-	result := client.Link.Get("linkToken")
+	link := client.Link.Get("linkToken")
 
-	if result.Accounts == nil {
+	if link == nil {
+		t.Error("Link object empty.")
+		return
+	}
+
+	if link.Accounts == nil {
 		t.Error("Link without account object.")
 		return
 	}

@@ -55,7 +55,11 @@ func (a *AccountClient) Get(accountId string) *NewAccount {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	newA := &NewAccount{client: a.client, Account: account, linkToken: a.linkToken}
+	newA := &NewAccount{
+		client:    a.client,
+		Account:   account,
+		linkToken: a.linkToken,
+	}
 	// The following populates the MovementClient struct in order to have it
 	// ready for the MovementM interface to use its methods
 	newA.Movement = &MovementClient{NewAccount: newA}

@@ -1,4 +1,6 @@
-{
+package fixtures
+
+var MovementObject = `{
   "id": "mov_BO381oEATXonG6bj",
   "object": "movement",
   "amount": 59400,
@@ -21,4 +23,4 @@
       }
   },
   "comment": "Pago factura 198"
-}
+}`
