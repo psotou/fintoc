@@ -1,3 +1,3 @@
-module github.com/psotou/fintoc-sdk
+module github.com/psotou/fintoc
 
 go 1.16

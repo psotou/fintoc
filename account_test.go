@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/psotou/fintoc-sdk/fixtures"
+	"github.com/psotou/fintoc/fixtures"
 )
 
 func TestAccountAll(t *testing.T) {
