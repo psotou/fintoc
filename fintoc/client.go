@@ -117,10 +117,7 @@ func (m *MockClient) Do(req *http.Request) (*http.Response, error) {
 
 // NewClient populates the APIClient
 func NewClient(secret string) (*APIClient, error) {
-	c := &APIClient{
-		Secret: secret,
-		// Client: &http.Client{},
-	}
+	c := &APIClient{Secret: secret}
 	// The following populates the LinkClient struct in order to have it
 	// ready for the LinkM interface to use its methods
 	c.Link = &LinkClient{APIClient: c}
