@@ -7,7 +7,7 @@ import (
     "fmt"
     "log"
 
-    "github.com/psotou/fintoc-sdk/fintoc"
+    "github.com/psotou/fintoc"
 )
 
 func main() {
