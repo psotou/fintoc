@@ -5,7 +5,28 @@ import (
 	"fmt"
 	"log"
 	"net/url"
+	"time"
 )
+
+type Account struct {
+	Id           string    `json:"id"`
+	Object       string    `json:"object"`
+	Name         string    `json:"name"`
+	OfficialName string    `json:"official_name"`
+	Number       string    `json:"number"`
+	HolderId     string    `json:"holder_id"`
+	HolderName   string    `json:"holder_name"`
+	Type         string    `json:"type"`
+	Currency     string    `json:"currency"`
+	Balance      Blnc      `json:"balance"`
+	RefreshedAt  time.Time `json:"refreshed_at"`
+}
+
+type Blnc struct {
+	Available int `json:"available"`
+	Current   int `json:"current"`
+	Limit     int `json:"limit"`
+}
 
 type NewAccount struct {
 	client *APIClient
