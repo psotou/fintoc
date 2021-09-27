@@ -5,7 +5,38 @@ import (
 	"fmt"
 	"log"
 	"net/url"
+	"time"
 )
+
+type Movement struct {
+	Id               string       `json:"id"`
+	Object           string       `json:"object"`
+	Amount           int          `json:"amount"`
+	PostDate         string       `json:"post_date"`
+	Description      string       `json:"description"`
+	TransactionDate  time.Time    `json:"transaction_date"`
+	Currency         string       `json:"currency"`
+	ReferenceId      string       `json:"reference_id"`
+	Type             string       `json:"type"`
+	Pending          bool         `json:"pending"`
+	RecipientAccount RcpntAccount `json:"recipient_account"`
+	SenderAccount    Sender       `json:"sender_account"`
+	Comment          string       `json:"comment"`
+}
+
+type RcpntAccount struct {
+	HolderId    string      `json:"holder_id"`
+	HolderName  string      `json:"holder_name"`
+	Number      string      `json:"number"`
+	Institution Institucion `json:"institution"`
+}
+
+type Sender struct {
+	HolderId    string      `json:"holder_id"`
+	HolderName  string      `json:"holder_name"`
+	Number      string      `json:"number"`
+	Institution Institucion `json:"institution"`
+}
 
 type MovementClient struct {
 	*NewAccount
