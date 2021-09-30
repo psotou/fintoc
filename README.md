@@ -25,7 +25,7 @@ func main() {
 
 This ~yet another carbon copy~  Go library is heavily influenced by the [Python SDK](https://github.com/fintoc-com/fintoc-python) devoleped by the guys at [Fintoc](https://fintoc.com/).
 
-The library is in a very early stage, which means you can only use certain endpoints, namely, the ones related to the **links**, **accounts** and **movements** resources. Though the whole API should be wrapped up soon.
+The library is in a very early stage, which means you can only use certain endpoints, namely, the ones related to the **links**, **accounts** and **movements** resources. Though more resources of the API should be wrapped up in the ~near~ future.
 
 # HOW-TO
 
@@ -40,7 +40,7 @@ if err != nil {
 }
 
 link := client.Link.Get("linkToken") // to return one link object
-links := client.Link.All()           // to return all of them
+links := client.Link.All()           // to return them all
 for _, l := range links {
     fmt.Println(l.Id)
 }
@@ -110,8 +110,8 @@ for _, mov := range movements {
 
 # TO-DO
 
-+ [ ] Add the rest of the resources
-+ [ ] Add a workflow
++ [ ] Add more resources
++ [x] Add a workflow
 + [x] Add unit tests
 + [x] Add query params to movements endpoint
 + [x] Add methods PATCH and DELETE for the link object
