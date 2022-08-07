@@ -24,18 +24,6 @@ type Balance struct {
 	Limit     int `json:"limit"`
 }
 
-// func (c *client) parseLinktoken(resourceURL string) string {
-// 	u, err := url.Parse(resourceURL)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	q := u.Query()
-// 	q.Add("link_token", c.linkToken)
-// 	u.RawQuery = q.Encode()
-
-// 	return u.String()
-// }
-
 func (lc *linkClient) GetAccounts() []Account {
 	return lc.Accounts
 }
