@@ -1,55 +1,90 @@
 package fintoc
 
 import (
+	"fmt"
+	"io"
 	"net/http"
 )
 
 const (
 	BaseURL      = "https://api.fintoc.com/v1/"
 	Accounts     = "accounts/%s"   // %s: {account_id}
-	AccountsAll  = "accounts/"     //
+	AccountsAll  = "accounts"      //
 	Movements    = "/movements/%s" // %s: {movement_id}
-	MovementsAll = "/movements/"   //
+	MovementsAll = "/movements"    //
 	Links        = "links/%s"      // %s: {link_token}
-	LinksAll     = "links/"        //
+	LinksAll     = "links"         //
 )
 
-// Fintoc API client
-type APIClient struct {
-	Secret string
-	// We add the LinkM interface in this struct to allow
-	// for a syntax like client.Link.Method()
-	Link LinkM
+type client struct {
+	secretKey string
+	linkToken string
 }
 
-// HTTP client interface to allow us to set instances of
-// either http.Client or our mock http client
-type HTTPClient interface {
-	Do(req *http.Request) (*http.Response, error)
+func NewClient(secret string) (*client, error) {
+	return &client{secretKey: secret}, nil
 }
 
-var Client HTTPClient
-
-func init() {
-	Client = &http.Client{}
+func formatURL(resourceURL string) string {
+	return fmt.Sprintf("%s%s", BaseURL, resourceURL)
 }
 
-// MockClient sets the function that our mock Do method will run instead
-// instead of the http.Client.Do method
-type MockClient struct {
-	DoFunc func(req *http.Request) (*http.Response, error)
+func (c *client) requestMethod(reqMethod, resourceURL string, reader io.Reader) (*http.Response, error) {
+	url := formatURL(resourceURL)
+	req, err := http.NewRequest(reqMethod, url, reader)
+	if err != nil {
+		return nil, err
+	}
+	req.Header = http.Header{
+		"Accept":        []string{"application/json"},
+		"Authorization": []string{c.secretKey},
+	}
+	if reqMethod == http.MethodPatch {
+		req.Header.Add("Content-Type", "application/json")
+	}
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
-// Do method that overrides the http.Client.Do method
-func (m *MockClient) Do(req *http.Request) (*http.Response, error) {
-	return m.DoFunc(req)
+func (c *client) get(url string) ([]byte, error) {
+	res, err := c.requestMethod(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+	return body, nil
 }
 
-// NewClient populates the APIClient
-func NewClient(secret string) (*APIClient, error) {
-	c := &APIClient{Secret: secret}
-	// The following populates the LinkClient struct in order to have it
-	// ready for the LinkM interface to use its methods
-	c.Link = &LinkClient{APIClient: c}
-	return c, nil
+func (c *client) patch(url string, payload io.Reader) ([]byte, error) {
+	res, err := c.requestMethod(http.MethodPatch, url, payload)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	return body, nil
+}
+
+func (c *client) delete(url string) (int, error) {
+	res, err := c.requestMethod(http.MethodDelete, url, nil)
+	if err != nil {
+		return -1, err
+	}
+	defer res.Body.Close()
+
+	return res.StatusCode, nil
 }
